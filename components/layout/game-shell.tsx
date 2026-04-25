@@ -31,7 +31,7 @@ export function GameShell({ children }: GameShellProps) {
       <div className="absolute inset-x-0 bottom-0 h-[34vh] bg-[radial-gradient(circle_at_center,rgba(239,197,109,0.18),transparent_55%),linear-gradient(180deg,transparent,rgba(12,21,34,0.92))]" />
       <div className="absolute inset-x-0 bottom-0 h-[28vh] bg-[linear-gradient(180deg,transparent,rgba(1,6,12,0.9))]" />
 
-      <main className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1700px] items-center px-4 py-8 sm:px-6">
+      <main className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1700px] items-start px-3 pb-28 pt-5 sm:px-6 sm:py-8 lg:items-center lg:pb-8">
         <div className="w-full">{children}</div>
       </main>
     </div>

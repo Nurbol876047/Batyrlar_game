@@ -1,8 +1,19 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { PointerEvent as ReactPointerEvent } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, BookOpenText, RotateCcw, ShieldAlert, Sparkles, Swords } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
+  BookOpenText,
+  RotateCcw,
+  ShieldAlert,
+  Sparkles,
+  Sword,
+  Swords,
+} from "lucide-react";
 
 import { ControlPad } from "@/components/gameplay/control-pad";
 import { GameHud } from "@/components/gameplay/game-hud";
@@ -40,6 +51,100 @@ const EMPTY_INPUT: KaboomInputState = {
   attack: 0,
   special: 0,
 };
+
+interface MobileCombatControlsProps {
+  onMoveStart: (intent: MoveIntent) => void;
+  onMoveEnd: (intent: MoveIntent) => void;
+  onJump: () => void;
+  onAttack: () => void;
+  onSpecial: () => void;
+  specialReady: boolean;
+}
+
+function MobileCombatControls({
+  onMoveStart,
+  onMoveEnd,
+  onJump,
+  onAttack,
+  onSpecial,
+  specialReady,
+}: MobileCombatControlsProps) {
+  const buildMoveHandlers = (intent: MoveIntent) => ({
+    onPointerDown: (event: ReactPointerEvent<HTMLButtonElement>) => {
+      if (!event.isPrimary || (event.pointerType === "mouse" && event.button !== 0)) {
+        return;
+      }
+
+      event.preventDefault();
+      event.currentTarget.setPointerCapture(event.pointerId);
+      onMoveStart(intent);
+    },
+    onPointerUp: (event: ReactPointerEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+        event.currentTarget.releasePointerCapture(event.pointerId);
+      }
+      onMoveEnd(intent);
+    },
+    onPointerCancel: (event: ReactPointerEvent<HTMLButtonElement>) => {
+      if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+        event.currentTarget.releasePointerCapture(event.pointerId);
+      }
+      onMoveEnd(intent);
+    },
+    onLostPointerCapture: () => onMoveEnd(intent),
+  });
+
+  const buildTapHandler = (action: () => void) => ({
+    onPointerDown: (event: ReactPointerEvent<HTMLButtonElement>) => {
+      if (!event.isPrimary || (event.pointerType === "mouse" && event.button !== 0)) {
+        return;
+      }
+
+      event.preventDefault();
+      action();
+    },
+  });
+
+  const mobileButton =
+    "flex h-14 min-w-0 touch-none select-none flex-col items-center justify-center gap-1 rounded-[18px] border border-white/12 bg-black/70 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/82 shadow-[0_12px_28px_rgba(0,0,0,0.34)] backdrop-blur";
+
+  return (
+    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#06101d]/92 px-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 shadow-[0_-20px_60px_rgba(0,0,0,0.48)] backdrop-blur-xl lg:hidden">
+      <div className="mx-auto grid max-w-xl grid-cols-[1fr_1fr_1fr_1.35fr_1fr] gap-2">
+        <button type="button" className={mobileButton} {...buildMoveHandlers("backward")}>
+          <ArrowLeft className="h-5 w-5" />
+          Артқа
+        </button>
+        <button type="button" className={mobileButton} {...buildMoveHandlers("forward")}>
+          <ArrowRight className="h-5 w-5" />
+          Алға
+        </button>
+        <button type="button" className={mobileButton} {...buildTapHandler(onJump)}>
+          <ArrowUp className="h-5 w-5" />
+          Секіру
+        </button>
+        <button
+          type="button"
+          className="flex h-14 min-w-0 touch-none select-none flex-col items-center justify-center gap-1 rounded-[18px] border border-primary/40 bg-primary text-[10px] font-black uppercase tracking-[0.12em] text-primary-foreground shadow-primary"
+          {...buildTapHandler(onAttack)}
+        >
+          <Sword className="h-6 w-6" />
+          Атака
+        </button>
+        <button
+          type="button"
+          disabled={!specialReady}
+          className={`${mobileButton} ${specialReady ? "border-accent/35 bg-accent/16 text-accent" : "opacity-45"}`}
+          {...(specialReady ? buildTapHandler(onSpecial) : {})}
+        >
+          <Sparkles className="h-5 w-5" />
+          Супер
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export function GameplayScene({ batyr }: GameplaySceneProps) {
   const inputStateRef = useRef({
@@ -348,7 +453,7 @@ export function GameplayScene({ batyr }: GameplaySceneProps) {
   );
 
   return (
-    <section className="mx-auto w-full max-w-[1536px] space-y-5 2xl:space-y-6">
+    <section className="mx-auto w-full max-w-[1536px] space-y-3 pb-6 sm:space-y-5 lg:pb-0 2xl:space-y-6">
       <GameHud
         batyr={batyr}
         hp={levelState.player.hp}
@@ -418,7 +523,7 @@ export function GameplayScene({ batyr }: GameplaySceneProps) {
           )}
         </div>
 
-        <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_520px]">
+        <div className="hidden gap-5 lg:grid xl:grid-cols-[minmax(0,1fr)_520px]">
           <div className="grid gap-5 lg:grid-cols-2">
           <Card>
             <CardContent className="space-y-4 p-6">
@@ -509,6 +614,15 @@ export function GameplayScene({ batyr }: GameplaySceneProps) {
         onCloseFact={closeFact}
         onAnswer={handleQuizAnswer}
         onContinue={continueAfterQuiz}
+      />
+
+      <MobileCombatControls
+        onMoveStart={handleMoveStart}
+        onMoveEnd={handleMoveEnd}
+        onJump={handleJump}
+        onAttack={handleAttack}
+        onSpecial={handleSpecial}
+        specialReady={specialReady}
       />
     </section>
   );
