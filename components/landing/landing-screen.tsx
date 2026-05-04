@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import {
   ArrowRight,
   BookOpenText,
-  Crown,
   Play,
   ShieldCheck,
   Sparkles,
@@ -72,10 +71,6 @@ export function LandingScreen({ onStart }: LandingScreenProps) {
         className="relative z-10 space-y-8"
       >
         <div className="flex flex-wrap items-center gap-3">
-          <Badge variant="accent">
-            <Crown className="mr-2 h-3.5 w-3.5" />
-            Жаңа cinematic demo
-          </Badge>
           <Badge variant="secondary">Kaboom.js adventure</Badge>
         </div>
 

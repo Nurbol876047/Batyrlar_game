@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 
-import { Badge } from "@/components/ui/badge";
 import { Ornament } from "@/components/ui/ornament";
 
 export function BootLoader() {
@@ -20,7 +19,6 @@ export function BootLoader() {
         animate={{ opacity: 1, y: 0 }}
         className="relative z-10 flex max-w-2xl flex-col items-center gap-6 text-center"
       >
-        <Badge>Ашық сабаққа арналған demo</Badge>
         <div className="relative flex h-36 w-36 items-center justify-center">
           <div className="absolute inset-0 animate-pulse-soft rounded-full border border-primary/30 bg-primary/10" />
           <div className="absolute inset-5 rounded-full border border-accent/30 bg-accent/10" />
@@ -30,8 +28,7 @@ export function BootLoader() {
           <p className="font-display text-6xl font-semibold ornament-text">Ерлік жолы</p>
           <Ornament className="mx-auto w-full max-w-xs" />
           <p className="text-balance text-base leading-8 text-foreground/72 sm:text-lg">
-            Қазақ батырларының рухын заманауи ойын форматында ашатын атмосфералық сабақтық
-            мини-жоба дайындалуда.
+            Қазақ батырларының рухын заманауи ойын форматында ашатын атмосфералық жоба жүктелуде.
           </p>
         </div>
       </motion.div>
