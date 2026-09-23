@@ -3,13 +3,40 @@
 import type { ReactNode } from "react";
 import { motion } from "framer-motion";
 
+import { useLanguageStore } from "@/store/language-store";
+
 interface GameShellProps {
   children: ReactNode;
+}
+
+function LanguageSwitcher() {
+  const language = useLanguageStore((state) => state.language);
+  const setLanguage = useLanguageStore((state) => state.setLanguage);
+
+  return (
+    <div className="fixed right-3 top-3 z-50 flex items-center gap-1 rounded-full border border-white/12 bg-black/45 p-1 backdrop-blur-xl sm:right-5 sm:top-5">
+      {(["kk", "en"] as const).map((option) => (
+        <button
+          key={option}
+          type="button"
+          onClick={() => setLanguage(option)}
+          className={`rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.08em] transition-colors ${
+            language === option
+              ? "bg-primary text-primary-foreground shadow-primary"
+              : "text-foreground/60 hover:text-foreground/90"
+          }`}
+        >
+          {option}
+        </button>
+      ))}
+    </div>
+  );
 }
 
 export function GameShell({ children }: GameShellProps) {
   return (
     <div className="relative min-h-screen overflow-hidden bg-steppe-glow text-foreground">
+      <LanguageSwitcher />
       <div className="absolute inset-0 bg-grid-steppe opacity-[0.08]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,224,154,0.12),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(34,211,184,0.08),transparent_28%)]" />
 

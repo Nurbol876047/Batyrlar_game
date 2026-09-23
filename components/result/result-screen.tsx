@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Ornament } from "@/components/ui/ornament";
+import { useT } from "@/hooks/use-translation";
 import type { Batyr, RunResult } from "@/lib/types";
 
 interface ResultScreenProps {
@@ -23,6 +24,9 @@ export function ResultScreen({
   onReplay,
   onChooseAnother,
 }: ResultScreenProps) {
+  const t = useT();
+  const { resultScreen } = t;
+
   return (
     <section className="space-y-8">
       <motion.div
@@ -44,7 +48,7 @@ export function ResultScreen({
                 </div>
                 <div>
                   <p className="text-sm uppercase tracking-[0.34em] text-foreground/55">
-                    Жорық аяқталды
+                    {resultScreen.campaignComplete}
                   </p>
                   <h2 className="font-display text-5xl text-white">{result.rank}</h2>
                 </div>
@@ -55,11 +59,15 @@ export function ResultScreen({
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="rounded-[24px] border border-white/10 bg-white/[0.04] p-4">
-                <p className="text-xs uppercase tracking-[0.3em] text-foreground/55">Ұпай</p>
+                <p className="text-xs uppercase tracking-[0.3em] text-foreground/55">
+                  {resultScreen.score}
+                </p>
                 <p className="mt-2 font-display text-4xl text-white">{result.score}</p>
               </div>
               <div className="rounded-[24px] border border-white/10 bg-white/[0.04] p-4">
-                <p className="text-xs uppercase tracking-[0.3em] text-foreground/55">Үздік нәтиже</p>
+                <p className="text-xs uppercase tracking-[0.3em] text-foreground/55">
+                  {resultScreen.bestResult}
+                </p>
                 <p className="mt-2 font-display text-4xl text-white">{result.bestScore}</p>
               </div>
             </div>
@@ -68,7 +76,7 @@ export function ResultScreen({
 
         <div className="space-y-6">
           <div className="space-y-4">
-            <Badge>Финалдық есеп</Badge>
+            <Badge>{resultScreen.finalReportBadge}</Badge>
             <h1 className="font-display text-6xl text-white">{batyr.name}</h1>
             <p className="text-lg leading-8 text-foreground/72">{result.historicInsight}</p>
             <Ornament />
@@ -79,7 +87,9 @@ export function ResultScreen({
               <CardContent className="space-y-2 p-5">
                 <div className="flex items-center gap-2 text-primary">
                   <Award className="h-4 w-4" />
-                  <p className="text-xs uppercase tracking-[0.32em] text-foreground/55">Артефакт</p>
+                  <p className="text-xs uppercase tracking-[0.32em] text-foreground/55">
+                    {resultScreen.artifact}
+                  </p>
                 </div>
                 <p className="font-display text-4xl text-white">
                   {result.collectedArtifacts}/{result.totalArtifacts}
@@ -91,7 +101,7 @@ export function ResultScreen({
                 <div className="flex items-center gap-2 text-accent">
                   <Sparkles className="h-4 w-4" />
                   <p className="text-xs uppercase tracking-[0.32em] text-foreground/55">
-                    Дұрыс жауап
+                    {resultScreen.correctAnswers}
                   </p>
                 </div>
                 <p className="font-display text-4xl text-white">{result.accuracy}%</p>
@@ -101,7 +111,9 @@ export function ResultScreen({
               <CardContent className="space-y-2 p-5">
                 <div className="flex items-center gap-2 text-primary">
                   <Shield className="h-4 w-4" />
-                  <p className="text-xs uppercase tracking-[0.32em] text-foreground/55">Қалған HP</p>
+                  <p className="text-xs uppercase tracking-[0.32em] text-foreground/55">
+                    {resultScreen.hpRemaining}
+                  </p>
                 </div>
                 <p className="font-display text-4xl text-white">{result.hpRemaining}</p>
               </CardContent>
@@ -110,7 +122,9 @@ export function ResultScreen({
               <CardContent className="space-y-2 p-5">
                 <div className="flex items-center gap-2 text-accent">
                   <Trophy className="h-4 w-4" />
-                  <p className="text-xs uppercase tracking-[0.32em] text-foreground/55">Уақыт</p>
+                  <p className="text-xs uppercase tracking-[0.32em] text-foreground/55">
+                    {resultScreen.time}
+                  </p>
                 </div>
                 <p className="font-display text-4xl text-white">{result.durationLabel}</p>
               </CardContent>
@@ -121,9 +135,9 @@ export function ResultScreen({
             <CardContent className="space-y-5 p-6">
               <div className="space-y-2">
                 <p className="text-xs uppercase tracking-[0.32em] text-foreground/55">
-                  Achievement badges
+                  {resultScreen.achievementBadgesEyebrow}
                 </p>
-                <h3 className="font-display text-4xl text-white">Жетістіктер</h3>
+                <h3 className="font-display text-4xl text-white">{resultScreen.achievementsTitle}</h3>
               </div>
               <div className="flex flex-wrap gap-3">
                 {result.achievements.map((achievement) => (
@@ -132,7 +146,7 @@ export function ResultScreen({
                   </Badge>
                 ))}
                 {result.achievements.length === 0 && (
-                  <Badge variant="outline">Жолды жалғастырсаңыз, жаңа марапаттар ашылады</Badge>
+                  <Badge variant="outline">{resultScreen.noAchievements}</Badge>
                 )}
               </div>
             </CardContent>
@@ -141,10 +155,10 @@ export function ResultScreen({
           <div className="flex flex-wrap gap-3">
             <Button size="lg" onClick={onReplay}>
               <RotateCcw className="h-5 w-5" />
-              Қайта ойнау
+              {resultScreen.replayButton}
             </Button>
             <Button size="lg" variant="outline" onClick={onChooseAnother}>
-              Басқа батырды таңдау
+              {resultScreen.chooseAnotherButton}
             </Button>
           </div>
         </div>

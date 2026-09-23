@@ -3,8 +3,11 @@
 import { motion } from "framer-motion";
 
 import { Ornament } from "@/components/ui/ornament";
+import { useT } from "@/hooks/use-translation";
 
 export function BootLoader() {
+  const t = useT();
+
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-steppe-glow px-6 text-foreground">
       <div className="absolute inset-0 bg-grid-steppe opacity-25" />
@@ -25,10 +28,10 @@ export function BootLoader() {
           <div className="absolute inset-[42px] rounded-full bg-gradient-to-br from-primary to-accent shadow-primary" />
         </div>
         <div className="space-y-4">
-          <p className="font-display text-6xl font-semibold ornament-text">Ерлік жолы</p>
+          <p className="font-display text-6xl font-semibold ornament-text">{t.bootLoader.title}</p>
           <Ornament className="mx-auto w-full max-w-xs" />
           <p className="text-balance text-base leading-8 text-foreground/72 sm:text-lg">
-            Қазақ батырларының рухын заманауи ойын форматында ашатын атмосфералық жоба жүктелуде.
+            {t.bootLoader.subtitle}
           </p>
         </div>
       </motion.div>

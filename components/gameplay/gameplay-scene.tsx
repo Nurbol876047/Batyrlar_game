@@ -31,6 +31,7 @@ import { buildRunResult, createInitialLevelState } from "@/lib/game";
 import type { Batyr, OverlayEvent, QuizFeedback } from "@/lib/types";
 import { useAudioFeedback } from "@/hooks/use-audio-feedback";
 import type { SoundKind } from "@/hooks/use-audio-feedback";
+import { useLanguage, useT } from "@/hooks/use-translation";
 import { useGameStore } from "@/store/game-store";
 
 interface GameplaySceneProps {
@@ -69,6 +70,8 @@ function MobileCombatControls({
   onSpecial,
   specialReady,
 }: MobileCombatControlsProps) {
+  const t = useT();
+  const { mobileControls } = t;
   const buildMoveHandlers = (intent: MoveIntent) => ({
     onPointerDown: (event: ReactPointerEvent<HTMLButtonElement>) => {
       if (!event.isPrimary || (event.pointerType === "mouse" && event.button !== 0)) {
@@ -114,15 +117,15 @@ function MobileCombatControls({
       <div className="mx-auto grid max-w-xl grid-cols-[1fr_1fr_1fr_1.35fr_1fr] gap-2">
         <button type="button" className={mobileButton} {...buildMoveHandlers("backward")}>
           <ArrowLeft className="h-5 w-5" />
-          Артқа
+          {mobileControls.back}
         </button>
         <button type="button" className={mobileButton} {...buildMoveHandlers("forward")}>
           <ArrowRight className="h-5 w-5" />
-          Алға
+          {mobileControls.forward}
         </button>
         <button type="button" className={mobileButton} {...buildTapHandler(onJump)}>
           <ArrowUp className="h-5 w-5" />
-          Секіру
+          {mobileControls.jump}
         </button>
         <button
           type="button"
@@ -130,7 +133,7 @@ function MobileCombatControls({
           {...buildTapHandler(onAttack)}
         >
           <Sword className="h-6 w-6" />
-          Атака
+          {mobileControls.attack}
         </button>
         <button
           type="button"
@@ -139,7 +142,7 @@ function MobileCombatControls({
           {...(specialReady ? buildTapHandler(onSpecial) : {})}
         >
           <Sparkles className="h-5 w-5" />
-          Супер
+          {mobileControls.special}
         </button>
       </div>
     </div>
@@ -159,6 +162,9 @@ export function GameplayScene({ batyr }: GameplaySceneProps) {
   const returnToSelection = useGameStore((state) => state.returnToSelection);
 
   const { play } = useAudioFeedback();
+  const t = useT();
+  const language = useLanguage();
+  const { gameplayScene } = t;
 
   const [levelState, setLevelState] = useState(() => createInitialLevelState(batyr));
   const [input, setInput] = useState<KaboomInputState>(EMPTY_INPUT);
@@ -393,6 +399,7 @@ export function GameplayScene({ batyr }: GameplaySceneProps) {
             batyr,
             state: levelState,
             previousBestScore,
+            language,
           }),
         );
       }, 1300);
@@ -405,7 +412,7 @@ export function GameplayScene({ batyr }: GameplaySceneProps) {
     }
 
     return undefined;
-  }, [batyr, finishBattle, levelState, previousBestScore]);
+  }, [batyr, finishBattle, language, levelState, previousBestScore]);
 
   const handleStateChange = useCallback((state: typeof levelState) => {
     setLevelState(state);
@@ -443,13 +450,13 @@ export function GameplayScene({ batyr }: GameplaySceneProps) {
         correct,
         explanation: activeEvent.payload.explanation,
         bonusText: correct
-          ? `+${activeEvent.payload.reward.score} ұпай, HP және энергия күшейді.`
-          : "Келесі дерек пен шайқас арқылы ұпайды қайта жинауға болады.",
+          ? gameplayScene.correctBonus(activeEvent.payload.reward.score)
+          : gameplayScene.wrongBonus,
       });
 
       play(correct ? "correct" : "wrong");
     },
-    [activeEvent, play],
+    [activeEvent, gameplayScene, play],
   );
 
   return (
@@ -475,6 +482,7 @@ export function GameplayScene({ batyr }: GameplaySceneProps) {
             paused={paused}
             resetKey={resetKey}
             quizResult={quizResult}
+            language={language}
             onStateChange={handleStateChange}
             onEvents={enqueueEvents}
             onSound={handleSound}
@@ -487,9 +495,9 @@ export function GameplayScene({ batyr }: GameplaySceneProps) {
               className="absolute inset-0 z-10 flex items-center justify-center bg-slate-950/50 backdrop-blur-sm"
             >
               <div className="rounded-[30px] border border-primary/20 bg-slate-950/65 px-8 py-6 text-center shadow-primary">
-                <Badge>Жеңіс</Badge>
-                <p className="mt-4 font-display text-5xl text-white">Шайқас аяқталды</p>
-                <p className="mt-2 text-foreground/70">Нәтиже экраны дайындалуда...</p>
+                <Badge>{gameplayScene.victoryBadge}</Badge>
+                <p className="mt-4 font-display text-5xl text-white">{gameplayScene.victoryTitle}</p>
+                <p className="mt-2 text-foreground/70">{gameplayScene.victorySubtitle}</p>
               </div>
             </motion.div>
           )}
@@ -504,18 +512,17 @@ export function GameplayScene({ batyr }: GameplaySceneProps) {
                 <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-destructive/12 text-destructive">
                   <ShieldAlert className="h-7 w-7" />
                 </div>
-                <p className="mt-4 font-display text-4xl text-white">Күшті қайта жинаңыз</p>
+                <p className="mt-4 font-display text-4xl text-white">{gameplayScene.defeatTitle}</p>
                 <p className="mt-3 text-sm leading-7 text-foreground/72">
-                  Бұл сынақта рух әлсіреді. Қайта бастап, артефакттарды көбірек жинап, білім
-                  сұрақтарына дәл жауап беріңіз.
+                  {gameplayScene.defeatDescription}
                 </p>
                 <div className="mt-6 flex flex-wrap justify-center gap-3">
                   <Button onClick={resetLevel}>
                     <RotateCcw className="h-4 w-4" />
-                    Қайта бастау
+                    {gameplayScene.restartButton}
                   </Button>
                   <Button variant="outline" onClick={returnToSelection}>
-                    Батыр таңдау
+                    {gameplayScene.chooseBatyrButton}
                   </Button>
                 </div>
               </div>
@@ -527,40 +534,40 @@ export function GameplayScene({ batyr }: GameplaySceneProps) {
           <div className="grid gap-5 lg:grid-cols-2">
           <Card>
             <CardContent className="space-y-4 p-6">
-              <Badge>Жорық тапсырмасы</Badge>
-              <h3 className="font-display text-4xl text-white md:text-5xl">Cinematic шайқас</h3>
+              <Badge>{gameplayScene.missionBadge}</Badge>
+              <h3 className="font-display text-4xl text-white md:text-5xl">
+                {gameplayScene.missionTitle}
+              </h3>
               <p className="text-base leading-8 text-foreground/72">
-                Kaboom.js қозғалтқышы қозғалысты, секіруді, соққыны, бөлшектерді және камераны
-                басқарады. 1536×864 стандартты 16:9 сахнада алға жылжыңыз, үш артефакт жинаңыз, барлық жауды
-                жеңіңіз және мәреге жетіңіз.
+                {gameplayScene.missionDescription}
               </p>
               <div className="rounded-[24px] border border-white/10 bg-white/[0.04] p-4 text-base leading-8 text-foreground/72">
                 <p className="flex items-center gap-2 text-primary">
                   <BookOpenText className="h-4 w-4" />
-                  Scrolls дерек ашады
+                  {gameplayScene.scrollsHint}
                 </p>
                 <p className="mt-2 flex items-center gap-2 text-accent">
                   <Sparkles className="h-4 w-4" />
-                  Дұрыс жауап HP мен энергия береді
+                  {gameplayScene.correctAnswerHint}
                 </p>
                 <p className="mt-2 flex items-center gap-2 text-primary">
                   <Swords className="h-4 w-4" />
-                  Соққы, камера және бөлшектер Kaboom арқылы жүреді
+                  {gameplayScene.kaboomHint}
                 </p>
               </div>
             </CardContent>
           </Card>
 
           <div className="rounded-[32px] border border-primary/16 bg-primary/8 p-6 text-base leading-8 text-foreground/78">
-            <p className="font-semibold text-primary">Келесі мақсат:</p>
+            <p className="font-semibold text-primary">{gameplayScene.nextObjective}</p>
             <p className="mt-2">
               {enemiesLeft > 0
-                ? `${enemiesLeft} жау қалды. Кең сахнада арақашықтықты сақтап, арнайы соққыны тиімді сәтте қолданыңыз.`
-                : "Жол ашық. Мәреге жетіп, ерлік сапарын аяқтаңыз."}
+                ? gameplayScene.enemiesRemaining(enemiesLeft)
+                : gameplayScene.pathClear}
             </p>
             <div className="mt-4 flex items-center gap-2 text-primary">
               <ArrowRight className="h-5 w-5" />
-              Прогресс: {Math.round(levelState.progress * 100)}%
+              {gameplayScene.progressLabel} {Math.round(levelState.progress * 100)}%
             </div>
           </div>
           </div>
@@ -570,9 +577,11 @@ export function GameplayScene({ batyr }: GameplaySceneProps) {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs uppercase tracking-[0.32em] text-foreground/55">
-                    On-screen controls
+                    {gameplayScene.onScreenControls}
                   </p>
-                  <h3 className="mt-2 font-display text-4xl text-white">Басқару</h3>
+                  <h3 className="mt-2 font-display text-4xl text-white">
+                    {gameplayScene.controlsTitle}
+                  </h3>
                 </div>
                 <Badge variant="secondary">Kaboom.js</Badge>
               </div>
@@ -590,17 +599,17 @@ export function GameplayScene({ batyr }: GameplaySceneProps) {
               />
 
               <div className="rounded-[24px] border border-white/10 bg-white/[0.04] p-4 text-sm leading-7 text-foreground/70">
-                <p className="font-semibold text-white">Клавиатура да қолдайды:</p>
-                <p>A / D немесе стрелкалар, ↑ / W, Enter, K</p>
+                <p className="font-semibold text-white">{gameplayScene.keyboardHint}</p>
+                <p>{gameplayScene.keyboardKeys}</p>
               </div>
 
               <div className="flex flex-wrap gap-3">
                 <Button variant="outline" onClick={returnToSelection}>
-                  Батырды ауыстыру
+                  {gameplayScene.switchBatyrButton}
                 </Button>
                 <Button variant="secondary" onClick={resetLevel}>
                   <RotateCcw className="h-4 w-4" />
-                  Деңгейді қайта бастау
+                  {gameplayScene.restartLevelButton}
                 </Button>
               </div>
             </CardContent>

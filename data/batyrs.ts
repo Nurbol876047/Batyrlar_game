@@ -107,6 +107,67 @@ export const batyrs: Batyr[] = [
     ],
     finalReflection:
       "Турсынбай Батырдың тұлғасы жас ұрпаққа шапшаңдық пен ерік-жігердің елдік мақсатпен ұштасқанда үлкен күшке айналатынын көрсетеді.",
+    translations: {
+      en: {
+        name: "Tursynbai Batyr",
+        title: "Master of Wind-Swift Campaigns",
+        description:
+          "In the game, Tursynbai Batyr is known as a character who defends the honor of his people, makes quick decisions, and stands out with dynamic movement.",
+        type: "Swift Attacker",
+        weapon: "Spear, sword",
+        style: "Fast movement, dynamic strikes",
+        specialAbility: "Storm Surge",
+        era: "Epic Age",
+        quote: "A nation's strength lies not only in a brave heart, but in unity.",
+        biography:
+          "The image of Tursynbai Batyr embodies courage, alert movement, and loyalty to one's comrades. Throughout the game, he appears as a batyr who strikes quickly and acts boldly at decisive moments.",
+        legacy:
+          "This batyr's image conveys to students the idea that heroism goes hand in hand with quick thinking, keeping one's word, and serving the nation.",
+        strengths: ["Swift", "Agile", "Bold", "Dynamic"],
+        facts: [
+          {
+            title: "Dynamic Spirit",
+            description:
+              "Tursynbai Batyr's image reveals a courageous character, always ready to take a bold step and defend the honor of his people.",
+            rewardLabel: "+120 points and spirit power",
+          },
+          {
+            title: "Campaign Momentum",
+            description:
+              "Tursynbai Batyr is described as a batyr who makes quick decisions and finds a way out of unexpected situations.",
+            rewardLabel: "Energy refill",
+          },
+          {
+            title: "Model of Heroism",
+            description:
+              "For Tursynbai Batyr, it is important to place loyalty to comrades and the honor of the people above strength alone.",
+            rewardLabel: "Small defense boost",
+          },
+        ],
+        quiz: [
+          {
+            question: "What is Tursynbai Batyr's playstyle?",
+            options: ["Fast movement, dynamic strikes", "Only slow defense", "Only trading"],
+            explanation:
+              "Tursynbai Batyr is presented as an attacker who relies on fast movement and dynamic strikes.",
+          },
+          {
+            question: "What weapon does Tursynbai Batyr use?",
+            options: ["Spear, sword", "Axe only", "Dombra and pen"],
+            explanation:
+              "The character card shows that Tursynbai Batyr's weapons are the spear and sword.",
+          },
+          {
+            question: "What value does Tursynbai Batyr's image teach the student?",
+            options: ["Serving the nation faithfully", "Selfishness", "Rejecting knowledge"],
+            explanation:
+              "Tursynbai Batyr's image reflects the values of faithful service to the nation, courage, and responsibility.",
+          },
+        ],
+        finalReflection:
+          "Tursynbai Batyr's character shows the younger generation that speed and willpower become a great force when united with a national purpose.",
+      },
+    },
   },
   {
     id: "bogenbay",
@@ -214,6 +275,66 @@ export const batyrs: Batyr[] = [
     ],
     finalReflection:
       "Баян Батырдың жолы оқушыларға елді қорғауда күш қана емес, тәртіп пен ұйымшылдық та шешуші рөл атқаратынын түсіндіреді.",
+    translations: {
+      en: {
+        name: "Bayan Batyr",
+        title: "Powerful Commander, Shield of the Nation",
+        description:
+          "Bayan Batyr is associated with the 18th-century period of defending the nation, known as a courageous character who relies on solid defense and powerful strikes.",
+        type: "Master of Heavy Strikes",
+        weapon: "Battle-axe, spear",
+        style: "Powerful strikes, solid defense",
+        specialAbility: "Lightning Flash",
+        era: "18th century",
+        quote: "A powerful hand grows stronger through the unity of the nation.",
+        biography:
+          "The image of Bayan Batyr is tied to the ideas of defending the nation, discipline, bold decision-making, and inspiring fellow warriors. In the game, he appears as a batyr who delivers heavy strikes and holds a solid defense.",
+        legacy:
+          "Through this character, students see the ideas of leadership, discipline, and fighting for a common cause during a historical period.",
+        strengths: ["Powerful", "Resilient", "Organizer", "Courageous"],
+        facts: [
+          {
+            title: "Historic Commander",
+            description:
+              "Bayan Batyr is presented as a figure embodying the spirit of national defense during the Dzungar invasions, and the importance of discipline and unity.",
+            rewardLabel: "+120 points and a historic badge",
+          },
+          {
+            title: "Courageous Character",
+            description:
+              "Bayan Batyr's image stands out not only for strength, but also for discipline and perseverance before battle.",
+            rewardLabel: "HP restoration",
+          },
+          {
+            title: "Mission to Defend the Nation",
+            description:
+              "Bayan Batyr's heroic path is shown as an example of perseverance in defending the people and the path to freedom.",
+            rewardLabel: "Extra energy",
+          },
+        ],
+        quiz: [
+          {
+            question: "Which period is Bayan Batyr associated with?",
+            options: ["18th century", "Only the 21st century", "A medieval sea voyage"],
+            explanation: "The card links Bayan Batyr to the 18th century.",
+          },
+          {
+            question: "What is Bayan Batyr's playstyle?",
+            options: ["Powerful strikes, solid defense", "Only fast jumping", "Only trading"],
+            explanation:
+              "Bayan Batyr is presented as a master of heavy strikes, whose style relies on powerful blows and solid defense.",
+          },
+          {
+            question: "Which quality does Bayan Batyr's image highlight?",
+            options: ["Courage and discipline", "Frivolity", "Forgetfulness"],
+            explanation:
+              "In Bayan Batyr's image, discipline, responsibility, and perseverance hold an important place alongside heroism.",
+          },
+        ],
+        finalReflection:
+          "Bayan Batyr's path teaches students that in defending the nation, not only strength but also discipline and organization play a decisive role.",
+      },
+    },
   },
   {
     id: "qabanbay",
@@ -321,6 +442,71 @@ export const batyrs: Batyr[] = [
     ],
     finalReflection:
       "Қабанбай батыр жас ұрпаққа жеңіс тек күшпен емес, сабыр, тәртіп және жауапкершілікпен келетінін еске салады.",
+    translations: {
+      en: {
+        name: "Qabanbai Batyr",
+        title: "The Balanced Power of the Daraboz Spirit",
+        description:
+          "Qabanbai Batyr is known in Kazakh history for his leadership, courage, and heroism in balancing attack and defense equally.",
+        type: "Balanced Guardian",
+        weapon: "Sword, shield, spear",
+        style: "Balanced attack and defense",
+        specialAbility: "Daraboz's Oath",
+        era: "18th century",
+        quote: "The road to victory demands patience and heroism in equal measure.",
+        biography:
+          "Qabanbai Batyr distinguished himself in battles against the Dzungars and became one of the commanders remembered by the people as 'Daraboz'. His image became a model of the balanced strength that defended the nation in a difficult period.",
+        legacy:
+          "Through the figure of Qabanbai, students grasp the importance of self-control, responsibility, and strategic thinking alongside courage.",
+        strengths: ["Balanced", "Composed", "Attacker", "Guardian"],
+        facts: [
+          {
+            title: "The Name Daraboz",
+            description:
+              "Qabanbai Batyr is remembered in historical memory under the name Daraboz, becoming a symbol of exceptional leadership and heroism.",
+            rewardLabel: "+120 points and a badge of fame",
+          },
+          {
+            title: "Balanced Decision",
+            description:
+              "In Qabanbai's image, courage and composure go hand in hand: he accurately judges both the moment to attack and the need to defend.",
+            rewardLabel: "Defense power increases",
+          },
+          {
+            title: "A Symbol of the Nation",
+            description:
+              "Qabanbai Batyr's name recalls the unity of the people, the idea of defending the homeland, and a persistent struggle.",
+            rewardLabel: "Energy restoration",
+          },
+        ],
+        quiz: [
+          {
+            question: "By what other name is Qabanbai Batyr also known?",
+            options: ["Daraboz", "Zhyrau (bard)", "Only an envoy"],
+            explanation:
+              "Qabanbai Batyr's name is remembered in historical memory alongside the name Daraboz.",
+          },
+          {
+            question: "What quality does Qabanbai's image show?",
+            options: [
+              "Balancing attack and defense equally",
+              "Only staying still",
+              "Only entertainment",
+            ],
+            explanation:
+              "In Qabanbai's character, calculation and caution hold a special place alongside courage.",
+          },
+          {
+            question: "What lesson can a student learn from Qabanbai?",
+            options: ["Responsibility and self-control", "Rashness", "Distrust"],
+            explanation:
+              "Qabanbai Batyr's character teaches responsibility and weighing decisions carefully, alongside heroism.",
+          },
+        ],
+        finalReflection:
+          "Qabanbai Batyr reminds the younger generation that victory comes not through strength alone, but through composure, discipline, and responsibility.",
+      },
+    },
   },
   {
     id: "raiymbek",
@@ -428,6 +614,67 @@ export const batyrs: Batyr[] = [
     ],
     finalReflection:
       "Райымбек батырдың образы оқушыларға жас жігердің елге сүйіспеншілікпен біріккенде нағыз ерлікке айналатынын жеткізеді.",
+    translations: {
+      en: {
+        name: "Raiymbek Batyr",
+        title: "The Agile Hero of the Zhetisu Spirit",
+        description:
+          "Raiymbek Batyr is remembered by the people as an agile, alert historical batyr who fought fearlessly for his homeland.",
+        type: "Master of Agile Strikes",
+        weapon: "Sword, light spear",
+        style: "Light movement, frequent strikes",
+        specialAbility: "Steed's Momentum",
+        era: "18th century",
+        quote: "A brave-hearted person carries the nation's hope within them.",
+        biography:
+          "Raiymbek Batyr is remembered for the tradition of heroism in the Zhetisu region and his perseverance in defending his homeland. His image is often spoken of as a young, dynamic, and spirited batyr.",
+        legacy:
+          "This figure shows students youthful energy, love for the homeland, and fearlessness in the face of hardship.",
+        strengths: ["Agile", "Alert", "Energetic", "Responsible"],
+        facts: [
+          {
+            title: "Hero of Zhetisu",
+            description:
+              "Raiymbek Batyr's name is closely tied to the heroic tradition of the Zhetisu region and the idea of defending the homeland.",
+            rewardLabel: "+120 points and a spiritual badge",
+          },
+          {
+            title: "Youthful Energy",
+            description:
+              "Raiymbek's image offers a model of alertness and perseverance, bold action, and loyalty to the nation.",
+            rewardLabel: "Speed power",
+          },
+          {
+            title: "Loyalty to the Homeland",
+            description:
+              "His heroism is bound to defending his native land, justifying the people's trust, and not losing spirit even in hardship.",
+            rewardLabel: "HP and energy boost",
+          },
+        ],
+        quiz: [
+          {
+            question: "Which region is Raiymbek Batyr's image often associated with?",
+            options: ["Zhetisu", "Only a seacoast", "The Arctic"],
+            explanation:
+              "Raiymbek Batyr is remembered by the people alongside the heroic tradition of the Zhetisu region.",
+          },
+          {
+            question: "What quality does his character embody?",
+            options: ["Energy and agility", "Weakness", "Indifference"],
+            explanation:
+              "Raiymbek's image clearly shows alertness, energy, and readiness to act quickly.",
+          },
+          {
+            question: "What is one of the most important ideas about Raiymbek?",
+            options: ["Defending the homeland", "Avoiding responsibility", "Not needing knowledge"],
+            explanation:
+              "Raiymbek Batyr's heroic path calls for loyalty to the homeland and living up to the people's trust.",
+          },
+        ],
+        finalReflection:
+          "Raiymbek Batyr's image conveys to students that youthful energy, when united with love for the nation, becomes true heroism.",
+      },
+    },
   },
 ];
 

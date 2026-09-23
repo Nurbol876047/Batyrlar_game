@@ -1,3 +1,4 @@
+import { getUiStrings } from "@/lib/i18n";
 import type {
   Batyr,
   LevelArtifact,
@@ -7,6 +8,7 @@ import type {
   LevelState,
   RunResult,
 } from "@/lib/types";
+import type { Language } from "@/store/language-store";
 
 export const LEVEL_WIDTH = 4600;
 export const STAGE_HEIGHT = 864;
@@ -181,37 +183,43 @@ export const formatDuration = (ms: number) => {
   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 };
 
-export const determineRank = ({
-  score,
-  accuracy,
-  collectedArtifacts,
-  totalArtifacts,
-  hpRatio,
-}: {
-  score: number;
-  accuracy: number;
-  collectedArtifacts: number;
-  totalArtifacts: number;
-  hpRatio: number;
-}): RunResult["rank"] => {
+export const determineRank = (
+  {
+    score,
+    accuracy,
+    collectedArtifacts,
+    totalArtifacts,
+    hpRatio,
+  }: {
+    score: number;
+    accuracy: number;
+    collectedArtifacts: number;
+    totalArtifacts: number;
+    hpRatio: number;
+  },
+  language: Language,
+): RunResult["rank"] => {
+  const ranks = getUiStrings(language).game.ranks;
+
   if (
     score >= 1150 &&
     accuracy >= 70 &&
     collectedArtifacts === totalArtifacts &&
     hpRatio >= 0.48
   ) {
-    return "Ұлы Батыр";
+    return ranks.great;
   }
 
   if (score >= 760 && accuracy >= 40) {
-    return "Ел Қорғаушы";
+    return ranks.guardian;
   }
 
-  return "Жас Батыр";
+  return ranks.young;
 };
 
-export const computeAchievements = (batyr: Batyr, state: LevelState) => {
+export const computeAchievements = (batyr: Batyr, state: LevelState, language: Language) => {
   const achievements: string[] = [];
+  const labels = getUiStrings(language).game.achievements;
   const totalArtifacts = state.artifacts.length;
   const accuracy =
     state.stats.questionsAnswered > 0
@@ -219,23 +227,23 @@ export const computeAchievements = (batyr: Batyr, state: LevelState) => {
       : 0;
 
   if (state.stats.collectedArtifacts === totalArtifacts) {
-    achievements.push("Шежіре сақтаушы");
+    achievements.push(labels.chronicleKeeper);
   }
 
   if (accuracy === 100 && state.stats.questionsAnswered > 0) {
-    achievements.push("Даланың зерегі");
+    achievements.push(labels.steppeSage);
   }
 
   if (state.player.hp >= state.player.maxHp * 0.55) {
-    achievements.push("Қайсар жүрек");
+    achievements.push(labels.braveHeart);
   }
 
   if (state.stats.usedSpecial) {
-    achievements.push(`${batyr.name} қуаты`);
+    achievements.push(labels.heroPower(batyr.name));
   }
 
   if (state.stats.defeatedEnemies === state.enemies.length) {
-    achievements.push("Жорық жеңімпазы");
+    achievements.push(labels.campaignVictor);
   }
 
   return achievements;
@@ -245,23 +253,28 @@ export const buildRunResult = ({
   batyr,
   state,
   previousBestScore,
+  language,
 }: {
   batyr: Batyr;
   state: LevelState;
   previousBestScore: number;
+  language: Language;
 }): RunResult => {
   const accuracy =
     state.stats.questionsAnswered > 0
       ? Math.round((state.stats.correctAnswers / state.stats.questionsAnswered) * 100)
       : 0;
 
-  const rank = determineRank({
-    score: state.player.score,
-    accuracy,
-    collectedArtifacts: state.stats.collectedArtifacts,
-    totalArtifacts: state.artifacts.length,
-    hpRatio: state.player.hp / state.player.maxHp,
-  });
+  const rank = determineRank(
+    {
+      score: state.player.score,
+      accuracy,
+      collectedArtifacts: state.stats.collectedArtifacts,
+      totalArtifacts: state.artifacts.length,
+      hpRatio: state.player.hp / state.player.maxHp,
+    },
+    language,
+  );
 
   return {
     heroId: batyr.id,
@@ -271,7 +284,7 @@ export const buildRunResult = ({
     collectedArtifacts: state.stats.collectedArtifacts,
     totalArtifacts: state.artifacts.length,
     accuracy,
-    achievements: computeAchievements(batyr, state),
+    achievements: computeAchievements(batyr, state, language),
     hpRemaining: state.player.hp,
     factsUnlocked: state.stats.factsUnlocked,
     bestScore: Math.max(previousBestScore, state.player.score),

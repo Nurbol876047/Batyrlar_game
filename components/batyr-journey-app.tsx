@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { CharacterSelectScreen } from "@/components/character-select/character-select-screen";
@@ -10,7 +10,9 @@ import { BootLoader } from "@/components/layout/boot-loader";
 import { GameShell } from "@/components/layout/game-shell";
 import { LandingScreen } from "@/components/landing/landing-screen";
 import { ResultScreen } from "@/components/result/result-screen";
-import { batyrs, batyrMap } from "@/data/batyrs";
+import { batyrs } from "@/data/batyrs";
+import { useLanguage } from "@/hooks/use-translation";
+import { localizeBatyrs } from "@/lib/localize-batyr";
 import { useGameStore } from "@/store/game-store";
 
 export function BatyrJourneyApp() {
@@ -27,6 +29,13 @@ export function BatyrJourneyApp() {
   const [booting, setBooting] = useState(true);
   const [mounted, setMounted] = useState(false);
 
+  const language = useLanguage();
+  const localizedBatyrs = useMemo(() => localizeBatyrs(batyrs, language), [language]);
+  const localizedBatyrMap = useMemo(
+    () => Object.fromEntries(localizedBatyrs.map((batyr) => [batyr.id, batyr])),
+    [localizedBatyrs],
+  );
+
   useEffect(() => {
     setMounted(true);
     const timeout = window.setTimeout(() => setBooting(false), 1200);
@@ -38,7 +47,7 @@ export function BatyrJourneyApp() {
     return <BootLoader />;
   }
 
-  const selectedBatyr = selectedBatyrId ? batyrMap[selectedBatyrId] : null;
+  const selectedBatyr = selectedBatyrId ? localizedBatyrMap[selectedBatyrId] : null;
 
   const renderScene = () => {
     if (scene === "landing") {
@@ -48,7 +57,7 @@ export function BatyrJourneyApp() {
     if (scene === "select" || !selectedBatyr) {
       return (
         <CharacterSelectScreen
-          batyrs={batyrs}
+          batyrs={localizedBatyrs}
           bestScores={bestScores}
           onSelect={selectBatyr}
         />
@@ -81,7 +90,11 @@ export function BatyrJourneyApp() {
     }
 
     return (
-      <CharacterSelectScreen batyrs={batyrs} bestScores={bestScores} onSelect={selectBatyr} />
+      <CharacterSelectScreen
+        batyrs={localizedBatyrs}
+        bestScores={bestScores}
+        onSelect={selectBatyr}
+      />
     );
   };
 

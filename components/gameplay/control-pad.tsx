@@ -10,6 +10,7 @@ import { useRef } from "react";
 import { ArrowLeft, ArrowRight, ArrowUp, Sparkles, Sword } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
+import { useT } from "@/hooks/use-translation";
 import { cn } from "@/lib/utils";
 
 type MoveIntent = "backward" | "forward";
@@ -52,6 +53,8 @@ export function ControlPad({
   specialCost,
   activeDirection,
 }: ControlPadProps) {
+  const t = useT();
+  const { controlPad } = t;
   const activePointerRef = useRef<number | null>(null);
   const lastActionAtRef = useRef(0);
 
@@ -142,7 +145,7 @@ export function ControlPad({
           {...buildDirectionalHandlers("backward")}
         >
           <ArrowLeft className="h-6 w-6" />
-          Артқа
+          {controlPad.back}
         </button>
 
         <button
@@ -154,7 +157,7 @@ export function ControlPad({
           type="button"
           {...buildDirectionalHandlers("forward")}
         >
-          Алға
+          {controlPad.forward}
           <ArrowRight className="h-6 w-6" />
         </button>
       </div>
@@ -169,7 +172,7 @@ export function ControlPad({
           {...buildActionHandlers(onJump)}
         >
           <ArrowUp className="h-6 w-6" />
-          Секіру
+          {controlPad.jump}
         </button>
 
         <button
@@ -181,7 +184,7 @@ export function ControlPad({
           {...buildActionHandlers(onAttack)}
         >
           <Sword className="h-6 w-6" />
-          Атака
+          {controlPad.attack}
         </button>
 
         <button
@@ -195,7 +198,7 @@ export function ControlPad({
           {...(specialReady ? buildActionHandlers(onSpecial) : {})}
         >
           <Sparkles className="h-6 w-6" />
-          {specialReady ? "Суперудар" : `${Math.round(energy)}/${specialCost}`}
+          {specialReady ? controlPad.specialStrike : `${Math.round(energy)}/${specialCost}`}
         </button>
       </div>
     </div>

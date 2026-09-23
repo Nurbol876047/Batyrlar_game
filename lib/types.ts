@@ -48,6 +48,36 @@ export interface BatyrGameplayStats {
   specialCooldown: number;
 }
 
+export interface BatyrTranslationFact {
+  title: string;
+  description: string;
+  rewardLabel: string;
+}
+
+export interface BatyrTranslationQuiz {
+  question: string;
+  options: string[];
+  explanation: string;
+}
+
+export interface BatyrTranslation {
+  name: string;
+  title: string;
+  description: string;
+  type: string;
+  weapon: string;
+  style: string;
+  specialAbility: string;
+  era: string;
+  quote: string;
+  biography: string;
+  legacy: string;
+  strengths: string[];
+  facts: BatyrTranslationFact[];
+  quiz: BatyrTranslationQuiz[];
+  finalReflection: string;
+}
+
 export interface Batyr {
   id: string;
   name: string;
@@ -68,6 +98,9 @@ export interface Batyr {
   facts: FactEntry[];
   quiz: QuizQuestion[];
   finalReflection: string;
+  translations: {
+    en: BatyrTranslation;
+  };
 }
 
 export interface LevelArtifact {
@@ -171,7 +204,7 @@ export interface RunResult {
   heroId: string;
   heroName: string;
   score: number;
-  rank: "Жас Батыр" | "Ел Қорғаушы" | "Ұлы Батыр";
+  rank: string;
   collectedArtifacts: number;
   totalArtifacts: number;
   accuracy: number;

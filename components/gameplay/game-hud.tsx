@@ -6,6 +6,7 @@ import { BatyrArtwork } from "@/components/ui/batyr-artwork";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { useT } from "@/hooks/use-translation";
 import type { Batyr } from "@/lib/types";
 
 interface GameHudProps {
@@ -33,6 +34,9 @@ export function GameHud({
   enemiesLeft,
   specialReady,
 }: GameHudProps) {
+  const t = useT();
+  const { gameHud } = t;
+
   return (
     <Card>
       <CardContent className="grid gap-3 p-3 sm:gap-5 sm:p-5 xl:grid-cols-[0.9fr_1.1fr] xl:items-center 2xl:p-6">
@@ -63,7 +67,7 @@ export function GameHud({
               <div className="flex items-center justify-between text-sm 2xl:text-base">
                 <div className="flex items-center gap-2 text-accent">
                   <Zap className="h-4 w-4" />
-                  Энергия
+                  {gameHud.energy}
                 </div>
                 <span className="font-semibold text-white">{Math.round(energy)}</span>
               </div>
@@ -76,7 +80,9 @@ export function GameHud({
           <div className="rounded-[20px] border border-white/10 bg-white/[0.04] p-3 sm:rounded-[24px] sm:p-4">
             <div className="flex items-center gap-2 text-primary">
               <Gem className="h-4 w-4" />
-              <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/55 sm:text-xs sm:tracking-[0.28em]">Ұпай</p>
+              <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/55 sm:text-xs sm:tracking-[0.28em]">
+                {gameHud.score}
+              </p>
             </div>
             <p className="mt-2 font-display text-3xl text-white sm:text-4xl">{score}</p>
           </div>
@@ -85,7 +91,7 @@ export function GameHud({
             <div className="flex items-center gap-2 text-accent">
               <Sparkles className="h-4 w-4" />
               <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/55 sm:text-xs sm:tracking-[0.28em]">
-                Артефакт
+                {gameHud.artifact}
               </p>
             </div>
             <p className="mt-2 font-display text-3xl text-white sm:text-4xl">
@@ -96,7 +102,9 @@ export function GameHud({
           <div className="rounded-[20px] border border-white/10 bg-white/[0.04] p-3 sm:rounded-[24px] sm:p-4">
             <div className="flex items-center gap-2 text-primary">
               <Swords className="h-4 w-4" />
-              <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/55 sm:text-xs sm:tracking-[0.28em]">Жау</p>
+              <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/55 sm:text-xs sm:tracking-[0.28em]">
+                {gameHud.enemy}
+              </p>
             </div>
             <p className="mt-2 font-display text-3xl text-white sm:text-4xl">{enemiesLeft}</p>
           </div>
@@ -105,18 +113,18 @@ export function GameHud({
             <div className="flex items-center gap-2 text-accent">
               <Shield className="h-4 w-4" />
               <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/55 sm:text-xs sm:tracking-[0.28em]">
-                Суперудар
+                {gameHud.specialStrike}
               </p>
             </div>
             <p className="mt-2 font-display text-xl text-white sm:text-2xl">
-              {specialReady ? "Дайын" : "Толық емес"}
+              {specialReady ? gameHud.ready : gameHud.notReady}
             </p>
           </div>
         </div>
 
         <div className="xl:col-span-2">
           <div className="mb-2 flex items-center justify-between text-sm text-foreground/70">
-            <span>Деңгей прогресі</span>
+            <span>{gameHud.levelProgress}</span>
             <span>{Math.round(progress * 100)}%</span>
           </div>
           <Progress value={progress * 100} className="h-4" />

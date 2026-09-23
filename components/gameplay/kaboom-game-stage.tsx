@@ -4,8 +4,10 @@ import { useEffect, useRef } from "react";
 import type { KaboomCtx } from "kaboom";
 
 import { LEVEL_WIDTH, clamp, createInitialLevelState } from "@/lib/game";
+import { getUiStrings } from "@/lib/i18n";
 import type { Batyr, LevelState, OverlayEvent, QuizReward } from "@/lib/types";
 import type { SoundKind } from "@/hooks/use-audio-feedback";
+import type { Language } from "@/store/language-store";
 
 export type MoveAxis = -1 | 0 | 1;
 
@@ -28,6 +30,7 @@ interface KaboomGameStageProps {
   paused: boolean;
   resetKey: number;
   quizResult: QuizResultSignal | null;
+  language: Language;
   onStateChange: (state: LevelState) => void;
   onEvents: (events: OverlayEvent[]) => void;
   onSound: (kind: SoundKind) => void;
@@ -464,7 +467,13 @@ function drawObstacle(k: KaboomCtx, x: number, cameraX: number, id: string, widt
   });
 }
 
-function drawHero(k: KaboomCtx, state: LevelState, runtime: Runtime, batyr: Batyr) {
+function drawHero(
+  k: KaboomCtx,
+  state: LevelState,
+  runtime: Runtime,
+  batyr: Batyr,
+  language: Language,
+) {
   const palette = getKaboomHeroPalette(batyr.id);
   const player = state.player;
   const x = player.x - runtime.cameraX;
@@ -539,7 +548,7 @@ function drawHero(k: KaboomCtx, state: LevelState, runtime: Runtime, batyr: Baty
 
   if (jumping) {
     k.drawText({
-      text: "секіру",
+      text: getUiStrings(language).kaboomStage.jumpText,
       pos: k.vec2(x - 40, spriteY - 22),
       size: 18,
       color: k.rgb("#3fe7dd"),
@@ -550,7 +559,12 @@ function drawHero(k: KaboomCtx, state: LevelState, runtime: Runtime, batyr: Baty
   drawWorldLabel(k, batyr.name, player.x - 120, spriteY - 24, runtime.cameraX, palette.label);
 }
 
-function drawEnemy(k: KaboomCtx, enemy: LevelState["enemies"][number], cameraX: number) {
+function drawEnemy(
+  k: KaboomCtx,
+  enemy: LevelState["enemies"][number],
+  cameraX: number,
+  language: Language,
+) {
   const x = enemy.x - cameraX;
   const footY = GROUND_Y;
   const now = Date.now();
@@ -636,7 +650,8 @@ function drawEnemy(k: KaboomCtx, enemy: LevelState["enemies"][number], cameraX: 
     radius: 4,
     gradient: [k.rgb("#fb7185"), k.rgb("#f4c15e")],
   });
-  drawWorldLabel(k, enemy.name, enemy.x - 120, headY - 66 * size, cameraX, "#ffffff");
+  const enemyLabel = getUiStrings(language).kaboomStage.enemyNames[enemy.id] ?? enemy.name;
+  drawWorldLabel(k, enemyLabel, enemy.x - 120, headY - 66 * size, cameraX, "#ffffff");
 }
 
 function drawParticles(k: KaboomCtx, runtime: Runtime) {
@@ -673,6 +688,7 @@ export function KaboomGameStage({
   paused,
   resetKey,
   quizResult,
+  language,
   onStateChange,
   onEvents,
   onSound,
@@ -682,6 +698,7 @@ export function KaboomGameStage({
   const inputRef = useRef(input);
   const pausedRef = useRef(paused);
   const quizResultRef = useRef<number | null>(null);
+  const languageRef = useRef(language);
   const callbacksRef = useRef({ onStateChange, onEvents, onSound });
 
   useEffect(() => {
@@ -691,6 +708,10 @@ export function KaboomGameStage({
   useEffect(() => {
     pausedRef.current = paused;
   }, [paused]);
+
+  useEffect(() => {
+    languageRef.current = language;
+  }, [language]);
 
   useEffect(() => {
     callbacksRef.current = { onStateChange, onEvents, onSound };
@@ -1125,11 +1146,11 @@ export function KaboomGameStage({
 
         runtime.state.enemies.forEach((enemy) => {
           if (enemy.alive) {
-            drawEnemy(ctx, enemy, runtime.cameraX);
+            drawEnemy(ctx, enemy, runtime.cameraX, languageRef.current);
           }
         });
 
-        drawHero(ctx, runtime.state, runtime, batyr);
+        drawHero(ctx, runtime.state, runtime, batyr, languageRef.current);
         drawParticles(ctx, runtime);
 
         ctx.drawRect({
@@ -1141,7 +1162,7 @@ export function KaboomGameStage({
           opacity: 0.34,
         });
         ctx.drawText({
-          text: "KABOOM ENGINE • A/D • ↑/W СЕКІРУ • ENTER СОҚҚЫ",
+          text: getUiStrings(languageRef.current).kaboomStage.controlsHint,
           pos: ctx.vec2(52, VIEW_HEIGHT - 48),
           size: 16,
           color: ctx.rgb("#d5c7a6"),

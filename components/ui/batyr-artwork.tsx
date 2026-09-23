@@ -1,5 +1,7 @@
 import { Axe, Shield, Sparkles, Swords, Target, Wind } from "lucide-react";
 
+import { useT } from "@/hooks/use-translation";
+import type { UiStrings } from "@/lib/i18n";
 import type { Batyr } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -18,18 +20,18 @@ function getBatyrIcon(id: string) {
   }
 }
 
-function getBatyrAura(id: string) {
+function getBatyrAura(id: string, auras: UiStrings["batyrArtwork"]["auras"]) {
   switch (id) {
     case "qobylandy":
-      return "Жел";
+      return auras.qobylandy;
     case "bogenbay":
-      return "Қуат";
+      return auras.bogenbay;
     case "qabanbay":
-      return "Теңдік";
+      return auras.qabanbay;
     case "raiymbek":
-      return "Еп";
+      return auras.raiymbek;
     default:
-      return "Рух";
+      return auras.default;
   }
 }
 
@@ -59,6 +61,7 @@ export function BatyrArtwork({
   size = "card",
   className,
 }: BatyrArtworkProps) {
+  const t = useT();
   const Icon = getBatyrIcon(batyr.id);
 
   if (size === "icon") {
@@ -110,7 +113,7 @@ export function BatyrArtwork({
       </div>
       <div className="absolute left-8 top-8 z-10 flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.06] px-3 py-2 text-[11px] uppercase tracking-[0.28em] text-white/75">
         <Target className="h-3.5 w-3.5 text-primary" />
-        {getBatyrAura(batyr.id)}
+        {getBatyrAura(batyr.id, t.batyrArtwork.auras)}
       </div>
 
       <div className={cn("absolute inset-x-5 flex items-end justify-center overflow-hidden", isProfile ? "bottom-14 top-16" : "bottom-12 top-20")}>
@@ -126,7 +129,9 @@ export function BatyrArtwork({
 
       <div className="absolute inset-x-7 bottom-7 z-10 flex items-end justify-between gap-4">
         <div className="space-y-1">
-          <p className="text-xs uppercase tracking-[0.4em] text-white/55">Батыр рухы</p>
+          <p className="text-xs uppercase tracking-[0.4em] text-white/55">
+            {t.batyrArtwork.spiritLabel}
+          </p>
           <h3 className={cn("font-display text-3xl font-semibold text-white", !isProfile && "text-2xl")}>
             {batyr.name}
           </h3>

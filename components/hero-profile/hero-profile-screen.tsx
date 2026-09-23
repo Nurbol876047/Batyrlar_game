@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Ornament } from "@/components/ui/ornament";
 import { Progress } from "@/components/ui/progress";
+import { useT } from "@/hooks/use-translation";
 import type { Batyr } from "@/lib/types";
 
 interface HeroProfileScreenProps {
@@ -22,6 +23,9 @@ export function HeroProfileScreen({
   onBack,
   onStartBattle,
 }: HeroProfileScreenProps) {
+  const t = useT();
+  const { heroProfile } = t;
+
   return (
     <section className="grid gap-8 xl:grid-cols-[0.94fr_1.06fr]">
       <motion.div
@@ -51,7 +55,7 @@ export function HeroProfileScreen({
         className="space-y-6"
       >
         <div className="space-y-4">
-          <Badge>Кейіпкер таныстырылымы</Badge>
+          <Badge>{heroProfile.badge}</Badge>
           <div className="space-y-3">
             <p className="text-sm uppercase tracking-[0.42em] text-foreground/55">{batyr.era}</p>
             <h2 className="font-display text-6xl text-white">{batyr.name}</h2>
@@ -66,13 +70,12 @@ export function HeroProfileScreen({
             <CardContent className="space-y-4 p-6">
               <div className="flex items-center gap-3">
                 <Sword className="h-5 w-5 text-primary" />
-                <p className="text-xs uppercase tracking-[0.34em] text-foreground/55">Қару</p>
+                <p className="text-xs uppercase tracking-[0.34em] text-foreground/55">
+                  {heroProfile.weaponLabel}
+                </p>
               </div>
               <p className="font-display text-3xl text-white">{batyr.weapon}</p>
-              <p className="text-sm leading-7 text-foreground/68">
-                Геймплейде батыр осы қаруға тән стильмен әрекет етеді: қозғалыс, соққы радиусы
-                және арнайы қабілет оған сай теңшелген.
-              </p>
+              <p className="text-sm leading-7 text-foreground/68">{heroProfile.weaponDescription}</p>
             </CardContent>
           </Card>
 
@@ -81,12 +84,12 @@ export function HeroProfileScreen({
               <div className="flex items-center gap-3">
                 <Sparkles className="h-5 w-5 text-accent" />
                 <p className="text-xs uppercase tracking-[0.34em] text-foreground/55">
-                  Ерекше қабілет
+                  {heroProfile.specialAbilityLabel}
                 </p>
               </div>
               <p className="font-display text-3xl text-white">{batyr.specialAbility}</p>
               <p className="text-sm leading-7 text-foreground/68">
-                Дұрыс жауаптар мен жиналған артефакттар арнайы соққыны жиі қолдануға көмектеседі.
+                {heroProfile.specialAbilityDescription}
               </p>
             </CardContent>
           </Card>
@@ -97,18 +100,20 @@ export function HeroProfileScreen({
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-primary">
                 <BookMarked className="h-5 w-5" />
-                <p className="text-xs uppercase tracking-[0.34em] text-foreground/55">Маңызы</p>
+                <p className="text-xs uppercase tracking-[0.34em] text-foreground/55">
+                  {heroProfile.legacyEyebrow}
+                </p>
               </div>
-              <h3 className="font-display text-4xl text-white">Тарихи мәні</h3>
+              <h3 className="font-display text-4xl text-white">{heroProfile.legacyTitle}</h3>
               <p className="text-sm leading-8 text-foreground/72">{batyr.legacy}</p>
             </div>
 
             <div className="space-y-4 rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
               {[
-                { label: "Шабуыл", value: batyr.stats.attack },
-                { label: "Қорғаныс", value: batyr.stats.defense },
-                { label: "Жылдамдық", value: batyr.stats.speed },
-                { label: "Парасат", value: batyr.stats.wisdom },
+                { label: heroProfile.stats.attack, value: batyr.stats.attack },
+                { label: heroProfile.stats.defense, value: batyr.stats.defense },
+                { label: heroProfile.stats.speed, value: batyr.stats.speed },
+                { label: heroProfile.stats.wisdom, value: batyr.stats.wisdom },
               ].map((item) => (
                 <div key={item.label} className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
@@ -125,11 +130,11 @@ export function HeroProfileScreen({
         <div className="flex flex-wrap gap-3">
           <Button variant="outline" size="lg" onClick={onBack}>
             <ArrowLeft className="h-5 w-5" />
-            Артқа
+            {heroProfile.backButton}
           </Button>
           <Button size="lg" onClick={onStartBattle}>
             <ShieldCheck className="h-5 w-5" />
-            Шайқасқа шығу
+            {heroProfile.startBattleButton}
           </Button>
         </div>
       </motion.div>

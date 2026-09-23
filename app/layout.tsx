@@ -17,7 +17,8 @@ const body = Manrope({
 
 export const metadata: Metadata = {
   title: "Батырды таңда: Ерлік жолы",
-  description: "Казахские батыры в формате современной образовательной мини-игры.",
+  description:
+    "Қазақ батырлары туралы заманауи білім беру мини-ойыны. A modern educational mini-game about Kazakh batyrs.",
   icons: {
     icon: "/icon.svg",
   },

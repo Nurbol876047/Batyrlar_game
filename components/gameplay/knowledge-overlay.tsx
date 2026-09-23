@@ -12,6 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useT } from "@/hooks/use-translation";
 import type { OverlayEvent, QuizFeedback } from "@/lib/types";
 
 interface KnowledgeOverlayProps {
@@ -42,6 +43,8 @@ export function KnowledgeOverlay({
   onAnswer,
   onContinue,
 }: KnowledgeOverlayProps) {
+  const t = useT();
+  const { knowledgeOverlay } = t;
   const open = Boolean(event);
   const quizOptionOrder = useMemo(() => {
     if (event?.type !== "quiz") {
@@ -71,18 +74,19 @@ export function KnowledgeOverlay({
             <DialogHeader className="space-y-4">
               <Badge>
                 <BookOpenText className="mr-2 h-3.5 w-3.5" />
-                Тарихи дерек
+                {knowledgeOverlay.factBadge}
               </Badge>
               <DialogTitle>{event.payload.title}</DialogTitle>
               <DialogDescription>{event.payload.description}</DialogDescription>
             </DialogHeader>
 
             <div className="rounded-[28px] border border-primary/20 bg-primary/8 p-5 text-sm leading-7 text-foreground/78">
-              Жинаған сыйлығыңыз: <span className="text-primary">{event.payload.rewardLabel}</span>
+              {knowledgeOverlay.rewardPrefix}{" "}
+              <span className="text-primary">{event.payload.rewardLabel}</span>
             </div>
 
             <div className="flex justify-end">
-              <Button onClick={onCloseFact}>Жолды жалғастыру</Button>
+              <Button onClick={onCloseFact}>{knowledgeOverlay.continueJourney}</Button>
             </div>
           </>
         )}
@@ -93,12 +97,10 @@ export function KnowledgeOverlay({
             <DialogHeader className="space-y-4">
               <Badge variant="accent">
                 <CircleHelp className="mr-2 h-3.5 w-3.5" />
-                Мини-сұрақ
+                {knowledgeOverlay.quizBadge}
               </Badge>
               <DialogTitle>{event.payload.question}</DialogTitle>
-              <DialogDescription>
-                Дұрыс жауап батырға қосымша ұпай, энергия және HP береді.
-              </DialogDescription>
+              <DialogDescription>{knowledgeOverlay.quizDescription}</DialogDescription>
             </DialogHeader>
 
             {!feedback ? (
@@ -128,14 +130,16 @@ export function KnowledgeOverlay({
                 >
                   <div className="mb-3 flex items-center gap-2 font-semibold">
                     <Sparkles className="h-4 w-4" />
-                    {feedback.correct ? "Дұрыс жауап!" : "Тағы да байқап көруге болады"}
+                    {feedback.correct
+                      ? knowledgeOverlay.correctFeedback
+                      : knowledgeOverlay.wrongFeedback}
                   </div>
                   <p>{feedback.explanation}</p>
                   <p className="mt-3 text-foreground/72">{feedback.bonusText}</p>
                 </div>
 
                 <div className="flex justify-end">
-                  <Button onClick={onContinue}>Жалғастыру</Button>
+                  <Button onClick={onContinue}>{knowledgeOverlay.continueButton}</Button>
                 </div>
               </div>
             )}
